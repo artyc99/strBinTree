@@ -42,34 +42,16 @@ class StrBinTree:
         """
         self.root = root
 
-    def add(self, s, node=None):
-        """
-        Adding new nodes
-        :param s: value of new node
-        :param node: node of the subtree were we need to add and current node
-        :return: None
-        """
-
-        if node is None:
-            node = self.root
-        if s >= node.value:
-            if node.right is not None:
-                self.add(s, node.right)
-            else:
-                node.right = Node(s)
-        else:
-            if node.left is not None:
-                self.add(s, node.left)
-            else:
-                node.left = Node(s)
-
     def __add__(self, s):
         """
         Function that make support concatenation strBinTree with strings (adding by "+")
         :param s: value
         :return: None
         """
-        self.add(self, s)
+
+        self.add(s)
+
+        return self
 
     def __repr__(self):
         """
@@ -81,11 +63,11 @@ class StrBinTree:
 
     def __len__(self):
         # TODO: make len function that returns count or nodes
-        pass
+        return len([value for value in self.__tree_iterate(self.root)])
 
     def __str__(self):
         """
-        Function for printing strBinTree by layers
+        Function for printing strBinTree by layers(only for debugging, now unworking)
         :return: str
         """
         layer_split = self.__slayer_master()
@@ -125,6 +107,30 @@ class StrBinTree:
             out_string += '\n'
 
         return out_string
+
+    def __iter__(self):
+        return self.__tree_iterate(self.root)
+
+    def add(self, s, node=None):
+        """
+        Adding new nodes
+        :param s: value of new node
+        :param node: node of the subtree were we need to add and current node
+        :return: None
+        """
+
+        if node is None:
+            node = self.root
+        if s >= node.value:
+            if node.right is not None:
+                self.add(s, node.right)
+            else:
+                node.right = Node(s)
+        else:
+            if node.left is not None:
+                self.add(s, node.left)
+            else:
+                node.left = Node(s)
 
     def isin(self, s, node=None):
         """
@@ -177,7 +183,8 @@ class StrBinTree:
 
     def to_list(self):
         # TODO: write to list func (check print(strBinTree.root), i think that normally its depth left down)
-        pass
+
+        return [value for value in self]
 
     def get(self):
         # TODO: write get func ( i think its normal find )
@@ -215,14 +222,41 @@ class StrBinTree:
         else:
             return
 
+    def __tree_iterate(self, root):
+        '''
+        Генератор упорядоченных значений элементов дерева.
+        '''
+        if root == None:
+            return
+
+        yield from self.__tree_iterate(root.left)
+        yield root.value
+        yield from self.__tree_iterate(root.right)
+
     def test(self):
         """
         Function for testing written code with BT
         :return: all what you need XD
         """
 
-        elem = lambda node: (elem(node.left) if node.left.left is not None else node) if node.left is not None else node
-        print(elem(self.root).value)
+        if self.current_iteration_node == None:
+            return
+
+        for node in self.test():
+            self.current_iteration_node.left = node
+            yield node
+        yield self.current_iteration_node.value
+        for node in self.test():
+            self.current_iteration_node.right = node
+            yield node
+        # yield from self.test(root.left)
+        # yield root.value
+        # yield from self.test(root.right)
+
+    # def __next__(self, like):
+    #     like = 1
+    #     while True:
+    #         yield like
 
 
 def main():
@@ -238,6 +272,8 @@ def main():
     tree.add(-1)
     tree.add(-5)
     tree.add(0)
+    tree.add(2)
+    tree.add(2)
     # val = -5
     # print(tree.isin(val))
     # tree.remove(val)
@@ -247,9 +283,11 @@ def main():
     # tree.remove(1)
     # tree.to_list()
 
-    # print(tree.to_list())
+    print(tree.to_list())
+    print(len(tree))
 
-    print(help(StrBinTree))
+    print(tree)
+    print((tree + 2))
 
 
 if __name__ == '__main__':
