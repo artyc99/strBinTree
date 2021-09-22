@@ -1,3 +1,6 @@
+from semantic_compare import SemanticComparator as sc
+
+
 class Node:
     def __init__(self, value):
         """
@@ -48,8 +51,10 @@ class StrBinTree:
         :param s: value
         :return: None
         """
-
-        self.add(s)
+        if type(s) == Node:
+            self.add(s.value)
+        else:
+            self.add(s)
 
         return self
 
@@ -182,12 +187,45 @@ class StrBinTree:
             self.remove(s, node.right, node_prev=node) if node.right is not None else False
 
     def to_list(self):
-        # TODO: write to list func (check print(strBinTree.root), i think that normally its depth left down)
-
+        """
+        Gen list values of Nodes
+        :return: list of values Nodes
+        """
         return [value for value in self]
 
-    def get(self):
-        # TODO: write get func ( i think its normal find )
+    def get(self, str_arg):
+        tmp_tree = self
+        tmp_tree + str_arg
+        lst_tree = tmp_tree.to_list()
+        left_elem = lst_tree[lst_tree.index(str_arg) - 1] if lst_tree.index(str_arg) > 0 else None
+        right_elem = lst_tree[lst_tree.index(str_arg) + 1] if lst_tree.index(str_arg) + 1 < len(lst_tree) else None
+        # distanse = [1 for symb in left_elem if ]
+
+        # coff1 = sum([l1 == l2 for l1, l2 in zip(str_arg, left_elem)]) if left_elem is not None else 0
+        # coff2 = sum([l1 == l2 for l1, l2 in zip(str_arg, right_elem)]) if right_elem is not None else 0
+
+        comparator = sc(sentencizer=True)
+        coff1 = comparator.compare_phrases(str_arg, left_elem)
+        coff2 = comparator.compare_phrases(str_arg, right_elem)
+
+        print(tmp_tree.to_list())
+        print(coff1, coff2)
+
+        # if left_elem is None:
+        #     return right_elem
+        # elif right_elem is None:
+        #     return left_elem
+        # elif coff1 > coff2:
+        #     return left_elem
+        # elif coff1 < coff2:
+        #     return right_elem
+        # elif coff1 == coff2:
+        #     if len(left_elem) < len(right_elem):
+        #         return left_elem
+        #     elif len(left_elem) > len(right_elem):
+        #         return right_elem
+        #     else len(left_elem) == len(right_elem):
+
         pass
 
     def __slayer_master(self, tree_layer=None):
@@ -260,20 +298,47 @@ class StrBinTree:
 
 
 def main():
-    node = Node(2)
+    tree = StrBinTree(Node('height'))
 
-    tree = StrBinTree(Node(1))
-    tree.add(5)
-    tree.add(6)
-    tree.add(7)
-    tree.add(3)
-    tree.add(2)
-    tree.add(4)
-    tree.add(-1)
-    tree.add(-5)
-    tree.add(0)
-    tree.add(2)
-    tree.add(2)
+    # tree1 = StrBinTree(Node(1))
+    # tree1 + 2
+    # tree1 + 0
+    #
+    # tree2 = StrBinTree(Node(5))
+    # tree2 + 3
+    # tree2 + 7
+    #
+    # tree1 + tree2
+    #
+    # print(tree1)
+
+    # tree.add(5)
+    # tree.add(6)
+    # tree.add(7)
+    # tree.add(3)
+    # tree.add(2)
+    # tree.add(4)
+    # tree.add(-1)
+    # tree.add(-5)
+    # tree.add(0)
+    # tree.add(2)
+    # tree.add(2)
+
+    tree + Node('test')
+    tree + 'test2'
+    tree.add('gode')
+    tree.add('gooode')
+    tree.add('important')
+    tree.add('like')
+    tree.add('kitchen')
+    tree.add('people')
+    tree.add('yes')
+    tree.add('base')
+    tree.add('cat')
+    tree.add('dog')
+    tree.add('early')
+    tree.add('five')
+
     # val = -5
     # print(tree.isin(val))
     # tree.remove(val)
@@ -283,11 +348,13 @@ def main():
     # tree.remove(1)
     # tree.to_list()
 
-    print(tree.to_list())
-    print(len(tree))
+    # print(tree.to_list())
+    # print(len(tree))
 
-    print(tree)
-    print((tree + 2))
+    # print(tree)
+    # print((tree + 2))
+    print(tree.get('goode'))
+    # print(tree.to_list())
 
 
 if __name__ == '__main__':
