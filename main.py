@@ -1,6 +1,3 @@
-from semantic_compare import SemanticComparator as sc
-
-
 class Node:
     def __init__(self, value):
         """
@@ -199,32 +196,25 @@ class StrBinTree:
         lst_tree = tmp_tree.to_list()
         left_elem = lst_tree[lst_tree.index(str_arg) - 1] if lst_tree.index(str_arg) > 0 else None
         right_elem = lst_tree[lst_tree.index(str_arg) + 1] if lst_tree.index(str_arg) + 1 < len(lst_tree) else None
-        # distanse = [1 for symb in left_elem if ]
 
-        # coff1 = sum([l1 == l2 for l1, l2 in zip(str_arg, left_elem)]) if left_elem is not None else 0
-        # coff2 = sum([l1 == l2 for l1, l2 in zip(str_arg, right_elem)]) if right_elem is not None else 0
+        coff1 = sum([l1 == l2 for l1, l2 in zip(str_arg, left_elem)]) if left_elem is not None else 0
+        coff2 = sum([l1 == l2 for l1, l2 in zip(str_arg, right_elem)]) if right_elem is not None else 0
 
-        comparator = sc(sentencizer=True)
-        coff1 = comparator.compare_phrases(str_arg, left_elem)
-        coff2 = comparator.compare_phrases(str_arg, right_elem)
-
-        print(tmp_tree.to_list())
-        print(coff1, coff2)
-
-        # if left_elem is None:
-        #     return right_elem
-        # elif right_elem is None:
-        #     return left_elem
-        # elif coff1 > coff2:
-        #     return left_elem
-        # elif coff1 < coff2:
-        #     return right_elem
-        # elif coff1 == coff2:
-        #     if len(left_elem) < len(right_elem):
-        #         return left_elem
-        #     elif len(left_elem) > len(right_elem):
-        #         return right_elem
-        #     else len(left_elem) == len(right_elem):
+        if left_elem is None:
+            return right_elem
+        elif right_elem is None:
+            return left_elem
+        elif coff1 > coff2:
+            return left_elem
+        elif coff1 < coff2:
+            return right_elem
+        elif coff1 == coff2:
+            if len(left_elem) < len(right_elem):
+                return left_elem
+            elif len(left_elem) > len(right_elem):
+                return right_elem
+            elif len(left_elem) == len(right_elem):
+                return left_elem
 
         pass
 
